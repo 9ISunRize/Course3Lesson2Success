@@ -1,6 +1,9 @@
 package ru.hogwarts.school2.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Student {
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
     private String name;
     private int age;
