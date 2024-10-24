@@ -1,7 +1,7 @@
 package ru.hogwarts.school2.model;
 
 public class Faculty {
-    private  Long id;
+    private Long id;
     private String name;
     private String color;
 
@@ -30,6 +30,7 @@ public class Faculty {
     public String getColor() {
         return color;
     }
+
     public void setColor(String color) {
         this.color = color;
     }

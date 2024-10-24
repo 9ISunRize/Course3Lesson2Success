@@ -7,28 +7,32 @@ import java.util.HashMap;
 import java.util.List;
 
 public class FacultyServiceImpl implements FacultyService {
-    private final HashMap<Long, Faculty> faculties  = new HashMap<>();
-    private long   listId = 0;
+    private final HashMap<Long, Faculty> faculties = new HashMap<>();
+    private long listId = 0;
 
     @Override
-    public Faculty createFaculty(Faculty faculty){
+    public Faculty createFaculty(Faculty faculty) {
         faculty.setId(++listId);
         faculties.put(listId, faculty);
         return faculty;
     }
+
     @Override
-    public Faculty findFaculty(long id){
+    public Faculty findFaculty(long id) {
         return faculties.get(id);
     }
+
     @Override
-    public Faculty editFaculty(Faculty faculty){
+    public Faculty editFaculty(Faculty faculty) {
         faculties.put(faculty.getId(), faculty);
         return faculty;
     }
+
     @Override
-    public Faculty deleteFaculty(long id){
+    public Faculty deleteFaculty(long id) {
         return faculties.remove(id);
     }
+
     @Override
     public List<Faculty> filterAllByColor(String color) {
         List<Faculty> list = faculties.values().stream()
