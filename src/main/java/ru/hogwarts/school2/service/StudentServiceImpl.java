@@ -1,11 +1,13 @@
 package ru.hogwarts.school2.service;
 
+import org.springframework.stereotype.Service;
 import ru.hogwarts.school2.model.Student;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+@Service
 public class StudentServiceImpl implements StudentService {
     private final HashMap<Long, Student> students = new HashMap<>();
     private long lastId = 0;

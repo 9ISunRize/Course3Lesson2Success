@@ -4,6 +4,7 @@ import ru.hogwarts.school2.model.Faculty;
 
 import java.util.List;
 
+
 public interface FacultyService {
     Faculty createFaculty(Faculty faculty);
 
