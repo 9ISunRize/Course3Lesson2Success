@@ -28,8 +28,8 @@ public class FacultyController {
     }
 
     @PutMapping("/{id}/edit")
-    public Faculty editFaculty(Faculty faculty) {
-        return facultyService.editFaculty(faculty);
+    public void editFaculty(@PathVariable("id") Long id, Faculty faculty) {
+        facultyService.editFaculty(id, faculty);
     }
 
     @DeleteMapping("/{id}/delete")

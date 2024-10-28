@@ -28,8 +28,8 @@ public class StudentController {
     }
 
     @PutMapping("/{id}/edit")
-    public Student editStudent(@RequestBody Student student) {
-        return studentService.editStudent(student);
+    public void  editStudent(@PathVariable ("id")Long id, @RequestBody Student student) {
+    studentService.editStudent(id, student);
     }
 
     @DeleteMapping("/{id}/delete")
