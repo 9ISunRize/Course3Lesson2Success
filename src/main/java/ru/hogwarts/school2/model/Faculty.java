@@ -1,5 +1,8 @@
 package ru.hogwarts.school2.model;
 
+import jakarta.persistence.Entity;
+
+
 public class Faculty {
     private Long id;
     private String name;
