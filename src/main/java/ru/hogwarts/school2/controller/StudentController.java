@@ -28,8 +28,8 @@ public class StudentController {
     }
 
     @PutMapping("/{id}/edit")
-    public void  editStudent(@PathVariable ("id")Long id, @RequestBody Student student) {
-    studentService.editStudent(id, student);
+    public void editStudent(@PathVariable("id") Long id, @RequestBody Student student) {
+        studentService.editStudent(id, student);
     }
 
     @DeleteMapping("/{id}/delete")
@@ -40,5 +40,10 @@ public class StudentController {
     @GetMapping("/get/by-age")
     public List<Student> filterAllByAge(@RequestParam("age") int age) {
         return studentService.filterAllByAge(age);
+    }
+
+    @GetMapping("/get/by-age-between")
+    List<Student> findByAgeBetween(int ageMin, int ageMax) {
+        return studentService.findByAgeBetween(ageMin, ageMax);
     }
 }

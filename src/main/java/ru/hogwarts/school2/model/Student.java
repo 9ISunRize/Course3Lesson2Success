@@ -1,10 +1,9 @@
 package ru.hogwarts.school2.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class Student {
@@ -13,11 +12,16 @@ public class Student {
     private Long id;
     private String name;
     private int age;
+    @ManyToOne
+    private Faculty faculty;
 
     public Student(Long id, String name, int age) {
         this.id = id;
         this.age = age;
         this.name = name;
+    }
+
+    public Student() {
     }
 
     public Long getId() {

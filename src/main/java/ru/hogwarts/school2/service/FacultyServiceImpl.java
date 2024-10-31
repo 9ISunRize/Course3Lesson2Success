@@ -1,11 +1,10 @@
 package ru.hogwarts.school2.service;
 
 import org.springframework.stereotype.Service;
+import ru.hogwarts.school2.exception.FacultyNotFoundException;
 import ru.hogwarts.school2.model.Faculty;
 import ru.hogwarts.school2.repository.FacultyRepository;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -25,13 +24,13 @@ public class FacultyServiceImpl implements FacultyService {
 
     @Override
     public Faculty findFaculty(long id) {
-        return facultyRepository.findById(id).orElseThrow();
+        return facultyRepository.findById(id).orElseThrow(() -> new FacultyNotFoundException(id));
     }
 
     @Override
     public void editFaculty(long id, Faculty faculty) {
         if (!facultyRepository.existsById(id)) {
-            throw new RuntimeException();
+            throw new FacultyNotFoundException(id);
         }
         faculty.setId(id);
         facultyRepository.save(faculty);
@@ -40,7 +39,7 @@ public class FacultyServiceImpl implements FacultyService {
 
     @Override
     public Faculty deleteFaculty(long id) {
-        Faculty faculty = facultyRepository.findById(id).orElseThrow();
+        Faculty faculty = facultyRepository.findById(id).orElseThrow(() -> new FacultyNotFoundException(id));
         facultyRepository.delete(faculty);
         return faculty;
     }
@@ -51,5 +50,10 @@ public class FacultyServiceImpl implements FacultyService {
                 .filter(faculty -> faculty.getColor().equals(color))
                 .toList();
 
+    }
+
+    @Override
+    public List<Faculty> getFacultyByColorOrName(String color, String name) {
+        return facultyRepository.findByColorIgnoreCaseOrNameIgnoreCase(color, name);
     }
 }
