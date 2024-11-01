@@ -23,6 +23,7 @@ public class Faculty {
     public Faculty() {
     }
 
+
     public Long getId() {
         return id;
     }

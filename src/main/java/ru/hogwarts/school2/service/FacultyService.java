@@ -18,4 +18,5 @@ public interface FacultyService {
     List<Faculty> filterAllByColor(String color);
 
     List<Faculty> getFacultyByColorOrName(String color, String name);
+
 }

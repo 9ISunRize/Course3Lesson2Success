@@ -7,12 +7,14 @@ import ru.hogwarts.school2.model.Student;
 import ru.hogwarts.school2.service.FacultyService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("faculty")
 public class FacultyController {
     @Autowired
     private FacultyService facultyService;
+    private FacultyController studentService;
 
     public FacultyController(FacultyService facultyService) {
         this.facultyService = facultyService;
@@ -48,4 +50,6 @@ public class FacultyController {
                                                  @RequestParam("name") String name) {
         return facultyService.getFacultyByColorOrName(color, name);
     }
+
+
 }
