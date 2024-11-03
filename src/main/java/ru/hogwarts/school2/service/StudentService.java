@@ -20,5 +20,5 @@ public interface StudentService {
     List<Student> findByAgeBetween(int ageMin, int ageMax);
     List <Student> findStudentsByFacultyId(Long id);
 
-    Optional<Faculty> findFacultyByStudentId(Long id);
+
 }

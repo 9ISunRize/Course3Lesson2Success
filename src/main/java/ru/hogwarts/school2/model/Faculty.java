@@ -14,6 +14,7 @@ public class Faculty {
     @OneToMany
     private List<Student> students;
 
+
     public Faculty(Long id, String name, String color) {
         this.id = id;
         this.name = name;
@@ -23,6 +24,13 @@ public class Faculty {
     public Faculty() {
     }
 
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
+    }
 
     public Long getId() {
         return id;

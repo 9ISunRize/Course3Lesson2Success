@@ -13,11 +13,11 @@ import java.util.Optional;
 @Service
 public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
-private  final FacultyRepository facultyRepository;
 
-    public StudentServiceImpl(StudentRepository studentRepository, FacultyRepository facultyRepository) {
+
+    public StudentServiceImpl(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
-        this.facultyRepository = facultyRepository;
+
     }
 
     @Override
@@ -65,8 +65,5 @@ private  final FacultyRepository facultyRepository;
     public List <Student>  findStudentsByFacultyId(Long id){
         return studentRepository.findByFacultyId(id);
     }
-    @Override
-   public Optional<Faculty> findFacultyByStudentId(Long id){
-        return facultyRepository.findById(id);
-   }
+
 }

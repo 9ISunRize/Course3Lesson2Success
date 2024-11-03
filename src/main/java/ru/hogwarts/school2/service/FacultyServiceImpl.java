@@ -3,6 +3,7 @@ package ru.hogwarts.school2.service;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school2.exception.FacultyNotFoundException;
 import ru.hogwarts.school2.model.Faculty;
+import ru.hogwarts.school2.model.Student;
 import ru.hogwarts.school2.repository.FacultyRepository;
 
 import java.util.List;
@@ -56,5 +57,8 @@ public class FacultyServiceImpl implements FacultyService {
     public List<Faculty> getFacultyByColorOrName(String color, String name) {
         return facultyRepository.findByColorIgnoreCaseOrNameIgnoreCase(color, name);
     }
-
+    @Override
+    public Faculty  findFacultyByStudentId(Long id){
+        return facultyRepository.findByStudentId(id);
+    }
 }

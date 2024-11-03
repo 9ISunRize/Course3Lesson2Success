@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school2.model.Faculty;
 import ru.hogwarts.school2.model.Student;
 import ru.hogwarts.school2.service.FacultyService;
+import ru.hogwarts.school2.service.StudentService;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,7 +15,8 @@ import java.util.Optional;
 public class FacultyController {
     @Autowired
     private FacultyService facultyService;
-    private FacultyController studentService;
+    private StudentService studentService;
+
 
     public FacultyController(FacultyService facultyService) {
         this.facultyService = facultyService;
@@ -50,6 +52,9 @@ public class FacultyController {
                                                  @RequestParam("name") String name) {
         return facultyService.getFacultyByColorOrName(color, name);
     }
-
+    @GetMapping("/{id}/get-by-studentId")
+    public Faculty findStudentByFacultyId(@PathVariable("id") Long id) {
+        return facultyService.findFacultyByStudentId(id);
+    }
 
 }
