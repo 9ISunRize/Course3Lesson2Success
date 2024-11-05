@@ -15,7 +15,6 @@ import java.util.Optional;
 public class FacultyController {
     @Autowired
     private FacultyService facultyService;
-    private StudentService studentService;
 
 
     public FacultyController(FacultyService facultyService) {
@@ -51,10 +50,6 @@ public class FacultyController {
     public List<Faculty> getFacultyByColorOrName(@RequestParam("color") String color,
                                                  @RequestParam("name") String name) {
         return facultyService.getFacultyByColorOrName(color, name);
-    }
-    @GetMapping("/{id}/get-by-studentId")
-    public Faculty findStudentByFacultyId(@PathVariable("id") Long id) {
-        return facultyService.findFacultyByStudentId(id);
     }
 
 }
