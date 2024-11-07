@@ -2,10 +2,12 @@ package ru.hogwarts.school2.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ru.hogwarts.school2.model.Faculty;
 import ru.hogwarts.school2.model.Student;
 import ru.hogwarts.school2.service.StudentService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("student")
@@ -16,24 +18,45 @@ public class StudentController {
     public StudentController(StudentService studentService) {
         this.studentService = studentService;
     }
+
     @GetMapping("/{id}/get")
-    public Student getStudent(@PathVariable("id") Long id){
+    public Student getStudent(@PathVariable("id") Long id) {
         return studentService.findStudent(id);
     }
+
     @PostMapping("/add")
-    public Student createStudent(@RequestBody Student student){
+    public Student createStudent(@RequestBody Student student) {
         return studentService.createStudent(student);
     }
-    @PutMapping ("/{id}/edit")
-    public Student editStudent(@RequestBody Student student){
-        return studentService.editStudent(student);
+
+    @PutMapping("/{id}/edit")
+    public void editStudent(@PathVariable("id") Long id, @RequestBody Student student) {
+        studentService.editStudent(id, student);
     }
+
     @DeleteMapping("/{id}/delete")
-    public Student deleteStudent(@PathVariable("id") Long id){
+    public Student deleteStudent(@PathVariable("id") Long id) {
         return studentService.deleteStudent(id);
     }
-    @GetMapping ("/get/by-age")
-    public List<Student> filterAllByAge (@RequestParam("age") int age){
+
+    @GetMapping("/get/by-age")
+    public List<Student> filterAllByAge(@RequestParam("age") int age) {
         return studentService.filterAllByAge(age);
+    }
+
+    @GetMapping("/get/by-age-between")
+    List<Student> findByAgeBetween(int ageMin, int ageMax) {
+        return studentService.findByAgeBetween(ageMin, ageMax);
+    }
+
+    @GetMapping("/{id}/get-faculty-by-student")
+    public Faculty findFacultyByStudentId(@PathVariable("id") Long id) {
+        Faculty faculty = studentService.findStudent(id).getFaculty();
+        return faculty;
+    }
+
+    @GetMapping("/{id}/get-student-by-faculty")
+    public List<Student> findStudentByFacultyId(@PathVariable("id") Long id) {
+        return studentService.findStudentsByFacultyId(id);
     }
 }

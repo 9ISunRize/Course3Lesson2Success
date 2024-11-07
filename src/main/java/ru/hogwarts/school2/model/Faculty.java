@@ -1,15 +1,29 @@
 package ru.hogwarts.school2.model;
 
+import jakarta.persistence.*;
+
+import java.util.List;
+
+@Entity
 public class Faculty {
-    private  Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String name;
     private String color;
+    @OneToMany
+    private List<Student> students;
+
 
     public Faculty(Long id, String name, String color) {
         this.id = id;
         this.name = name;
         this.color = color;
     }
+
+    public Faculty() {
+    }
+
 
     public Long getId() {
         return id;
@@ -30,6 +44,7 @@ public class Faculty {
     public String getColor() {
         return color;
     }
+
     public void setColor(String color) {
         this.color = color;
     }
