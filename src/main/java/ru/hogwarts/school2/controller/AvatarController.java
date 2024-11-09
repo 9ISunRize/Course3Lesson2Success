@@ -21,7 +21,7 @@ public class AvatarController {
     }
 
     @PostMapping(path = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void uploadImage(@PathVariable("studentId") long studentId,
+    public void uploadImage(@RequestParam("studentId") long studentId,
                             @RequestBody MultipartFile multipartFile) throws IOException {
         avatarService.uploadImage(studentId, multipartFile);
     }
