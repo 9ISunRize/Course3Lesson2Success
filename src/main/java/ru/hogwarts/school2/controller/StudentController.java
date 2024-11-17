@@ -1,6 +1,7 @@
 package ru.hogwarts.school2.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school2.model.Faculty;
 import ru.hogwarts.school2.model.Student;
@@ -30,8 +31,9 @@ public class StudentController {
     }
 
     @PutMapping("/{id}/edit")
-    public void editStudent(@PathVariable("id") Long id, @RequestBody Student student) {
-        studentService.editStudent(id, student);
+    public ResponseEntity<Student> editStudent(@PathVariable Long id, @RequestBody Student student) {
+        Student updatedStudent = studentService.editStudent(id, student);
+        return ResponseEntity.ok(updatedStudent);
     }
 
     @DeleteMapping("/{id}/delete")

@@ -2,13 +2,10 @@ package ru.hogwarts.school2.service;
 
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school2.exception.StudentNotFoundException;
-import ru.hogwarts.school2.model.Faculty;
 import ru.hogwarts.school2.model.Student;
-import ru.hogwarts.school2.repository.FacultyRepository;
 import ru.hogwarts.school2.repository.StudentRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -32,12 +29,13 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void editStudent(long id, Student student) {
+    public Student editStudent(long id, Student student) {
         if (!studentRepository.existsById(id)) {
             throw new StudentNotFoundException(id);
         }
         student.setId(id);
         studentRepository.save(student);
+        return student;
     }
 
     @Override

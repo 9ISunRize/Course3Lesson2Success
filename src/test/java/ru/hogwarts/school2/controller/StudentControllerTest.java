@@ -28,6 +28,7 @@ public class StudentControllerTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
+
     private String getBaseUrl() {
         return "http://localhost:" + port + "/student";
     }
@@ -74,20 +75,33 @@ public class StudentControllerTest {
 
     @Test
     void testEditStudent() {
-        // Given
-        Student student = createTestStudent();
-        student.setName("Рон Уизли");
 
-        // Отправляем PUT запрос для редактирования студента
-        ResponseEntity<Void> response = restTemplate.exchange(
-                getBaseUrl()+"/edit",
+        Student student = createTestStudent();
+        System.out.println("Created student ID: " + student.getId());
+        System.out.println("Created student initial name: " + student.getName());
+
+        student.setName("Рон Уизли");
+        System.out.println("Updated student name: " + student.getName());
+
+
+        String url = getBaseUrl() + "/{id}/edit";
+        System.out.println("Request URL: " + url);
+
+        ResponseEntity<Student> response = restTemplate.exchange(
+                url,
                 HttpMethod.PUT,
                 new HttpEntity<>(student),
-                Void.class
+                Student.class,
+                student.getId()
         );
 
-        // Проверяем, что запрос выполнен успешно
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        System.out.println("Response status: " + response.getStatusCode());
+        System.out.println("Response body: " + response.getBody());
+
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().getName()).isEqualTo("Рон Уизли");
     }
 
     @Test

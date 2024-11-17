@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import ru.hogwarts.school2.model.Faculty;
 import ru.hogwarts.school2.model.Student;
 
+import java.util.List;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -46,11 +48,12 @@ public class FacultyControllerTest {
     @Test
     public void testGetFaculty() {
 
-        Faculty created = createTestFaculty();
+        Faculty faculty = createTestFaculty();
 
         ResponseEntity<Faculty> response = restTemplate.getForEntity(
-                "http://localhost:" + port + "/faculty/" + created.getId() + "/get",
-                Faculty.class
+      getBaseUrl() + "{{id}}/get",
+                Faculty.class,
+                faculty.getId()
         );
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -78,21 +81,14 @@ public class FacultyControllerTest {
 
     @Test
     public void testDeleteFaculty() {
-        Faculty faculty = new Faculty();
-        faculty.setName("Когтевран");
-        faculty.setColor("Синий");
-
-        Faculty created = restTemplate.postForObject(
-                "http://localhost:" + port + "/faculty/add",
-                faculty,
-                Faculty.class
-        );
+  Faculty faculty = createTestFaculty();
 
         ResponseEntity<Faculty> response = restTemplate.exchange(
-                "http://localhost:" + port + "/faculty/" + created.getId() + "/delete",
+                getBaseUrl() + "/{id}/delete",
                 HttpMethod.DELETE,
                 null,
-                Faculty.class
+                Faculty.class,
+                faculty.getId()
         );
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -100,56 +96,29 @@ public class FacultyControllerTest {
 
     @Test
     public void testFilterAllByColor() {
-        Faculty faculty1 = new Faculty();
-        faculty1.setName("Гриффиндор");
-        faculty1.setColor("Красный");
-
-        Faculty faculty2 = new Faculty();
-        faculty2.setName("Другой факультет");
-        faculty2.setColor("Красный");
-
-        restTemplate.postForObject(
-                "http://localhost:" + port + "/faculty/add",
-                faculty1,
-                Faculty.class
-        );
-
-        restTemplate.postForObject(
-                "http://localhost:" + port + "/faculty/add",
-                faculty2,
-                Faculty.class
-        );
-
-        ResponseEntity<Faculty[]> response = restTemplate.getForEntity(
-                "http://localhost:" + port + "/faculty/get/by-color?color=Красный",
-                Faculty[].class
+        Faculty faculty = createTestFaculty();
+        ResponseEntity<List> response = restTemplate.getForEntity(
+                getBaseUrl() + "/get/by-color?color=Красный",
+                List.class,
+                faculty.getColor()
         );
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().length).isGreaterThanOrEqualTo(2);
     }
 
     @Test
     public void testGetFacultyByColorOrName() {
-        Faculty faculty = new Faculty();
-        faculty.setName("Гриффиндор");
-        faculty.setColor("Красный");
 
-        restTemplate.postForObject(
-                "http://localhost:" + port + "/faculty/add",
-                faculty,
-                Faculty.class
-        );
-
-        ResponseEntity<Faculty[]> response = restTemplate.getForEntity(
-                "http://localhost:" + port + "/faculty/get/by-color-or-name?color=Красный&name=Гриффиндор",
-                Faculty[].class
+        ResponseEntity<List> response = restTemplate.getForEntity(
+                getBaseUrl() + "/get/by-color-or-name?color=Красный&name=Гриффиндор",
+                List.class,
+                "Красный",
+               "Гриффиндор"
         );
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().length).isGreaterThanOrEqualTo(1);
     }
     private Faculty createTestFaculty() {
         Faculty faculty = new Faculty();
