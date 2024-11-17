@@ -9,6 +9,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import ru.hogwarts.school2.model.Faculty;
+import ru.hogwarts.school2.model.Student;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -20,7 +21,9 @@ public class FacultyControllerTest {
 
     @Autowired
     private TestRestTemplate restTemplate;
-
+    private String getBaseUrl() {
+        return "http://localhost:" + port + "/faculty";
+    }
     @Test
     public void testCreateFaculty() {
         Faculty faculty = new Faculty();
@@ -28,27 +31,22 @@ public class FacultyControllerTest {
         faculty.setColor("Красный");
 
         ResponseEntity<Faculty> response = restTemplate.postForEntity(
-                "http://localhost:" + port + "/faculty/add",
+                getBaseUrl() + "/add",
                 faculty,
                 Faculty.class
         );
+        System.out.println("Response status: " + response.getStatusCode());
+        System.out.println("Response body: " + response.getBody());
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().getName()).isEqualTo("Гриффиндор");
+        assertThat(response.getBody().getColor()).isEqualTo("Красный");
     }
-
     @Test
     public void testGetFaculty() {
-        Faculty faculty = new Faculty();
-        faculty.setName("Слизерин");
-        faculty.setColor("Зеленый");
 
-        Faculty created = restTemplate.postForObject(
-                "http://localhost:" + port + "/faculty/add",
-                faculty,
-                Faculty.class
-        );
+        Faculty created = createTestFaculty();
 
         ResponseEntity<Faculty> response = restTemplate.getForEntity(
                 "http://localhost:" + port + "/faculty/" + created.getId() + "/get",
@@ -62,28 +60,18 @@ public class FacultyControllerTest {
 
     @Test
     public void testEditFaculty() {
-        Faculty faculty = new Faculty();
-        faculty.setName("Пуффендуй");
-        faculty.setColor("Желтый");
-
-        Faculty created = restTemplate.postForObject(
-                "http://localhost:" + port + "/faculty/add",
-                faculty,
-                Faculty.class
-        );
-
-        created.setColor("Золотой");
+        Faculty faculty = createTestFaculty();
+        faculty.setColor("Золотой");
 
         restTemplate.put(
-                "http://localhost:" + port + "/faculty/" + created.getId() + "/edit",
-                created
+                "http://localhost:" + port + "/faculty/" + faculty.getId() + "/edit",
+                faculty
         );
 
         ResponseEntity<Faculty> response = restTemplate.getForEntity(
-                "http://localhost:" + port + "/faculty/" + created.getId() + "/get",
+                "http://localhost:" + port + "/faculty/" + faculty.getId() + "/get",
                 Faculty.class
         );
-
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().getColor()).isEqualTo("Золотой");
     }
@@ -162,5 +150,20 @@ public class FacultyControllerTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().length).isGreaterThanOrEqualTo(1);
+    }
+    private Faculty createTestFaculty() {
+        Faculty faculty = new Faculty();
+        faculty.setName("Тестовый факультет");
+        faculty.setColor("green");
+        ResponseEntity<Faculty> response = restTemplate.postForEntity(
+                "http://localhost:" + port + "/faculty"+ "/add",
+                faculty,
+               Faculty.class
+
+        );
+        if (response.getBody() == null) {
+            throw new RuntimeException("Не удалось создать тестовый факультет");
+        }
+        return response.getBody();
     }
 }

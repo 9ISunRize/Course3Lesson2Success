@@ -14,7 +14,7 @@ public class Student {
     private int age;
 
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Faculty faculty;
 
     public Student(Long id, String name, int age) {
