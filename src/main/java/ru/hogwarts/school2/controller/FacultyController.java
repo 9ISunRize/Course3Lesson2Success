@@ -1,6 +1,7 @@
 package ru.hogwarts.school2.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school2.model.Faculty;
 import ru.hogwarts.school2.model.Student;
@@ -27,13 +28,14 @@ public class FacultyController {
     }
 
     @PostMapping("/add")
-    public Faculty createFaculty(Faculty faculty) {
+    public Faculty createFaculty(@RequestBody Faculty faculty) {
         return facultyService.createFaculty(faculty);
     }
 
     @PutMapping("/{id}/edit")
-    public void editFaculty(@PathVariable("id") Long id, Faculty faculty) {
-        facultyService.editFaculty(id, faculty);
+    public ResponseEntity<Faculty> editFaculty(@PathVariable Long id, @RequestBody Faculty faculty) {
+        Faculty updatedStudent = facultyService.editFaculty(id, faculty);
+        return ResponseEntity.ok(updatedStudent);
     }
 
     @DeleteMapping("/{id}/delete")
@@ -42,8 +44,9 @@ public class FacultyController {
     }
 
     @GetMapping("/get/by-color")
-    public List<Faculty> filterAllByColor(@RequestParam("color") String color) {
-        return facultyService.filterAllByColor(color);
+    public ResponseEntity<List<Faculty>> getFacultiesByColor(@RequestParam String color) {
+        List<Faculty> faculties = facultyService.findByColor(color);
+        return ResponseEntity.ok(faculties);
     }
 
     @GetMapping("/get/by-color-or-name")
