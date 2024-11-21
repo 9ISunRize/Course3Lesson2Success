@@ -1,6 +1,7 @@
 package ru.hogwarts.school2.service;
 
 import org.junit.platform.commons.logging.LoggerFactory;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,7 +19,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.UUID;
-import java.util.logging.Logger;
+
 
 @Service
 public class AvatarServiceImpl implements AvatarService {

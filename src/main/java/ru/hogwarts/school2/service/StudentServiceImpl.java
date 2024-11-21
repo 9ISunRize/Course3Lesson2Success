@@ -1,6 +1,7 @@
 package ru.hogwarts.school2.service;
 
 import org.junit.platform.commons.logging.LoggerFactory;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school2.exception.StudentNotFoundException;
 import ru.hogwarts.school2.model.Student;
@@ -8,7 +9,7 @@ import ru.hogwarts.school2.repository.StudentRepository;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.logging.Logger;
+
 import java.util.stream.Collectors;
 
 @Service
