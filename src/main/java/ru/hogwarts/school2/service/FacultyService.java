@@ -1,7 +1,9 @@
 package ru.hogwarts.school2.service;
 
+import org.springframework.http.ResponseEntity;
 import ru.hogwarts.school2.model.Faculty;
 
+import java.util.Collection;
 import java.util.List;
 
 
@@ -18,5 +20,6 @@ public interface FacultyService {
 
     List<Faculty> getFacultyByColorOrName(String color, String name);
     List<Faculty> findByColor(String color);
-
+    Collection<Faculty> findByColorOrName(String name, String color);
+    ResponseEntity<String> getLongestNameOfFaculty();
 }

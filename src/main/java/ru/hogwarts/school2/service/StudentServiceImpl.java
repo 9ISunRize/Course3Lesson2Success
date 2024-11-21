@@ -6,8 +6,10 @@ import ru.hogwarts.school2.exception.StudentNotFoundException;
 import ru.hogwarts.school2.model.Student;
 import ru.hogwarts.school2.repository.StudentRepository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -74,5 +76,27 @@ public class StudentServiceImpl implements StudentService {
         logger.info("Отработал метод findStudentsByFacultyId");
         return studentRepository.findByFacultyId(id);
     }
+    @Override
+    public Collection<Student> readByFacultyId(long facultyId) {
+        logger.info("Отработал метод readByFacultyId");
+        return studentRepository.findByFacultyId(facultyId);
+    }
 
+    @Override
+    public Collection<String> getFilteredByName(){
+        logger.info("Отработал метод getFilteredByName");
+        return studentRepository.findAll().stream()
+                .map(Student::getName)
+                .map(String::toUpperCase)
+                .filter(s -> s.startsWith("A"))
+                .sorted()
+                .collect(Collectors.toList());
+    }
+    @Override
+    public Double getAllStudentsByAvgAge(){
+        return studentRepository.findAll().stream()
+                .mapToInt(Student::getAge)
+                .average()
+                .orElse(0);
+    }
 }

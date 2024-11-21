@@ -1,12 +1,17 @@
 package ru.hogwarts.school2.service;
 
 import org.junit.platform.commons.logging.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school2.exception.FacultyNotFoundException;
 import ru.hogwarts.school2.model.Faculty;
 import ru.hogwarts.school2.repository.FacultyRepository;
 
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 @Service
@@ -70,5 +75,19 @@ public class FacultyServiceImpl implements FacultyService {
     public List<Faculty> findByColor(String color) {
         logger.info("Отработал метод findByColor");
         return facultyRepository.findByColorIgnoreCase(color);
+    }
+    @Override
+    public ResponseEntity<String> getLongestNameOfFaculty(){
+        logger.info("Отработал метод getLongestNameOfFaculty");
+        Optional<String> longestFacultyName = facultyRepository.findAll().stream()
+                .map(Faculty::getName)
+                .max(Comparator.comparing(String::length));
+        return longestFacultyName.map(ResponseEntity::ok).
+                orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
+    @Override
+    public Collection<Faculty> findByColorOrName(String name, String color) {
+        logger.info("Отработал метод findByColorOrName");
+        return facultyRepository.findByNameIgnoreCaseOrColorIgnoreCase(name, color);
     }
 }

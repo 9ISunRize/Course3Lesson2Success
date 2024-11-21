@@ -1,14 +1,17 @@
 package ru.hogwarts.school2.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school2.model.Faculty;
 import ru.hogwarts.school2.model.Student;
 import ru.hogwarts.school2.service.StudentService;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("student")
@@ -61,4 +64,33 @@ public class StudentController {
     public List<Student> findStudentByFacultyId(@PathVariable("id") Long id) {
         return studentService.findStudentsByFacultyId(id);
     }
+    @GetMapping("/students/{id}")
+    public Collection<Student> readAllByFacultyId(@PathVariable long id) {
+        return studentService.readByFacultyId(id);
+    }
+
+    @GetMapping("/filteredbyname")
+    public ResponseEntity<Collection<String>> getAllStudentsWithName(){
+        Collection<String> students = studentService.getFilteredByName();
+        if(students.isEmpty()){return ResponseEntity.status(HttpStatus.NOT_FOUND).build();}
+        return ResponseEntity.ok(students);
+    }
+
+    @GetMapping("/getallstudentsbyavgage")
+    public Double getAllStudentsByAvgAge(){
+        return studentService.getAllStudentsByAvgAge();
+    }
+
+    @GetMapping("/sum41")
+    public int getSum(){
+        long time =System.currentTimeMillis();
+        Stream.iterate(1, a->a+1)
+                .limit(1_000_000)
+                //.parallel()
+                .reduce(0,(a,b)->a+b);
+        time=System.currentTimeMillis()-time;
+        System.out.println("Время работы ="+time);
+        return (int)time;
+    }
+
 }
