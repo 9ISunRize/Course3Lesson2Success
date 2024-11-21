@@ -1,12 +1,13 @@
 package ru.hogwarts.school2.service;
 
-import org.junit.platform.commons.logging.LoggerFactory;
-import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.school2.exception.AvatarNotFoundException;
 import ru.hogwarts.school2.exception.StudentNotFoundException;
@@ -19,11 +20,14 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.UUID;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class AvatarServiceImpl implements AvatarService {
     private final Logger logger = (Logger) LoggerFactory.getLogger(AvatarServiceImpl.class);
+
+
     @Value("${path.dir}")
     private String pathDir;
 
@@ -103,7 +107,7 @@ public class AvatarServiceImpl implements AvatarService {
             Files.createDirectory(path);
         }
     }
-    @Override
+
     public Page<Avatar> getAllAvatars(Integer pageNo, Integer pageSize) {
         logger.info("Отработал метод getAllAvatars");
         Pageable paging = PageRequest.of(pageNo, pageSize);

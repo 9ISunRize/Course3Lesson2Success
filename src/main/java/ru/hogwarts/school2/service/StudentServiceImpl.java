@@ -1,24 +1,26 @@
 package ru.hogwarts.school2.service;
 
-import org.junit.platform.commons.logging.LoggerFactory;
-import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import ru.hogwarts.school2.exception.StudentNotFoundException;
+import ru.hogwarts.school2.model.Faculty;
 import ru.hogwarts.school2.model.Student;
 import ru.hogwarts.school2.repository.StudentRepository;
 
-import java.util.Collection;
 import java.util.List;
-
+import java.util.Collection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.stream.Collectors;
 
 @Service
 public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
 
+
     private final Logger logger = (Logger) LoggerFactory.getLogger(AvatarServiceImpl.class);
-
-
     public StudentServiceImpl(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
 
@@ -26,6 +28,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student createStudent(Student student) {
+
         logger.info("Отработал метод createStudent");
         return studentRepository.save(student);
 
@@ -77,6 +80,7 @@ public class StudentServiceImpl implements StudentService {
         logger.info("Отработал метод findStudentsByFacultyId");
         return studentRepository.findByFacultyId(id);
     }
+
     @Override
     public Collection<Student> readByFacultyId(long facultyId) {
         logger.info("Отработал метод readByFacultyId");
@@ -100,4 +104,6 @@ public class StudentServiceImpl implements StudentService {
                 .average()
                 .orElse(0);
     }
+
+
 }
