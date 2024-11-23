@@ -105,5 +105,85 @@ public class StudentServiceImpl implements StudentService {
                 .orElse(0);
     }
 
+    @Override
+    public void getNames() {
+        logger.info("Отработал метод getNames");
+        List<Student> students = studentRepository.findAll();
+        if (students.size() < 6) {
+            logger.warn("Недостаточно студентов");
+            return;
+        }
+
+        System.out.println("Основной поток:");
+        System.out.println(students.get(0).getName());
+        System.out.println(students.get(1).getName());
+
+
+        Thread thread1 = new Thread(() -> {
+            System.out.println("Второй поток:");
+            System.out.println(students.get(2).getName());
+            System.out.println(students.get(3).getName());
+        });
+
+        Thread thread2 = new Thread(() -> {
+            System.out.println("Третий поток:");
+            System.out.println(students.get(4).getName());
+            System.out.println(students.get(5).getName());
+        });
+
+        thread1.start();
+        thread2.start();
+
+        try {
+            thread1.join();
+            thread2.join();
+        } catch (InterruptedException e) {
+            logger.error("Ошибка при ожидании завершения потоков: {}", e.getMessage());
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    @Override
+    public void getNamesSync() {
+        logger.info("Отработал метод getNamesSync");
+        List<Student> students = studentRepository.findAll();
+        if (students.size() < 6) {
+            logger.warn("Недостаточно студентов");
+            return;
+        }
+
+        printNameSynchronized(students.get(0));
+        printNameSynchronized(students.get(1));
+
+        Thread thread1 = new Thread(() -> {
+            printNameSynchronized(students.get(2));
+            printNameSynchronized(students.get(3));
+        });
+
+        Thread thread2 = new Thread(() -> {
+            printNameSynchronized(students.get(4));
+            printNameSynchronized(students.get(5));
+        });
+
+        thread1.start();
+        thread2.start();
+
+        try {
+            thread1.join();
+            thread2.join();
+        } catch (InterruptedException e) {
+            logger.error("Ошибка при ожидании завершения потоков: {}", e.getMessage());
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    private synchronized void printNameSynchronized(Student student) {
+        try {
+            System.out.println("Поток " + Thread.currentThread().getName() +
+                    ": Студент - " + student.getName());
+        } catch (Exception e) {
+            logger.error("Ошибка при выводе имени студента: {}", e.getMessage());
+        }
+    }
 
 }

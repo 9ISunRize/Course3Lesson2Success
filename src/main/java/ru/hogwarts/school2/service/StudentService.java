@@ -24,4 +24,10 @@ public interface StudentService {
     Collection<String> getFilteredByName();
 
     Double getAllStudentsByAvgAge();
+
+    void getNames();
+
+    void getNamesSync();
+
+
 }

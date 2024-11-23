@@ -92,5 +92,14 @@ public class StudentController {
         System.out.println("Время работы ="+time);
         return (int)time;
     }
+    @GetMapping("/print-parallel")
+    public void getNames() throws InterruptedException {
+        studentService.getNames();
+    }
+
+    @GetMapping("/print-synchronized")
+    public void getNamesSync() throws InterruptedException {
+        studentService.getNamesSync();
+    }
 
 }
