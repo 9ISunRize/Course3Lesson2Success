@@ -1,5 +1,6 @@
 package ru.hogwarts.school2.service;
 
+import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.school2.model.Avatar;
 
@@ -11,4 +12,6 @@ public interface AvatarService {
     Avatar getAvatarFromDB(long studentId);
 
     byte[] getAvatarFromLocal(long studentId);
+    Page<Avatar> getAllAvatars(Integer pageNo, Integer pageSize);
+
 }

@@ -1,6 +1,10 @@
 package ru.hogwarts.school2.service;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,9 +20,14 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.UUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class AvatarServiceImpl implements AvatarService {
+    private final Logger logger = (Logger) LoggerFactory.getLogger(AvatarServiceImpl.class);
+
+
     @Value("${path.dir}")
     private String pathDir;
 
@@ -32,6 +41,7 @@ public class AvatarServiceImpl implements AvatarService {
 
     @Override
     public void uploadImage(long studentId, MultipartFile multipartFile) throws IOException {
+        logger.info("Отработал метод uploadImage");
 
         createDirectory();
 
@@ -44,6 +54,7 @@ public class AvatarServiceImpl implements AvatarService {
 
     @Override
     public Avatar getAvatarFromDB(long studentId){
+        logger.info("Отработал метод getAvatarFromDB");
         boolean studentExist = studentRepository.existsById(studentId);
         if (!studentExist){
             throw new StudentNotFoundException(studentId);
@@ -54,6 +65,7 @@ public class AvatarServiceImpl implements AvatarService {
 
     @Override
     public byte[] getAvatarFromLocal(long studentId) {
+        logger.info("Отработал метод getAvatarFromLocal");
         boolean studentExist = studentRepository.existsById(studentId);
         if (!studentExist){
             throw new StudentNotFoundException(studentId);
@@ -70,6 +82,7 @@ public class AvatarServiceImpl implements AvatarService {
     }
 
     private void createAvatar(long studentId, MultipartFile multipartFile, String filePath) throws IOException {
+        logger.info("Отработал метод createAvatar");
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new StudentNotFoundException(studentId));
 
@@ -83,13 +96,21 @@ public class AvatarServiceImpl implements AvatarService {
     }
 
     private String getExtension(String originalPath) {
+        logger.info("Отработал метод getExtension");
         return originalPath.substring(originalPath.lastIndexOf(".") + 1);
     }
 
     private void createDirectory() throws IOException {
+        logger.info("Отработал метод createDirectory");
         Path path = Path.of(pathDir);
         if (Files.notExists(path)) {
             Files.createDirectory(path);
         }
+    }
+
+    public Page<Avatar> getAllAvatars(Integer pageNo, Integer pageSize) {
+        logger.info("Отработал метод getAllAvatars");
+        Pageable paging = PageRequest.of(pageNo, pageSize);
+        return avatarRepository.findAll(paging);
     }
 }

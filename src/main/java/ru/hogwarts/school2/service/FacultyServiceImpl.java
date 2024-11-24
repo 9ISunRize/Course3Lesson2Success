@@ -1,17 +1,24 @@
 package ru.hogwarts.school2.service;
 
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school2.exception.FacultyNotFoundException;
 import ru.hogwarts.school2.model.Faculty;
-import ru.hogwarts.school2.model.Student;
 import ru.hogwarts.school2.repository.FacultyRepository;
 
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class FacultyServiceImpl implements FacultyService {
     private final FacultyRepository facultyRepository;
-
+    private final Logger logger = (Logger) LoggerFactory.getLogger(AvatarServiceImpl.class);
     public FacultyServiceImpl(FacultyRepository facultyRepository) {
         this.facultyRepository = facultyRepository;
     }
@@ -19,27 +26,32 @@ public class FacultyServiceImpl implements FacultyService {
 
     @Override
     public Faculty createFaculty(Faculty faculty) {
+        logger.info("Отработал метод createFaculty");
         return facultyRepository.save(faculty);
 
     }
 
     @Override
     public Faculty findFaculty(long id) {
+        logger.info("Отработал метод findFaculty");
         return facultyRepository.findById(id).orElseThrow(() -> new FacultyNotFoundException(id));
     }
 
     @Override
-    public void editFaculty(long id, Faculty faculty) {
+    public Faculty editFaculty(long id, Faculty faculty) {
+        logger.info("Отработал метод editFaculty");
         if (!facultyRepository.existsById(id)) {
             throw new FacultyNotFoundException(id);
         }
         faculty.setId(id);
         facultyRepository.save(faculty);
 
+        return faculty;
     }
 
     @Override
     public Faculty deleteFaculty(long id) {
+        logger.info("Отработал метод deleteFaculty");
         Faculty faculty = facultyRepository.findById(id).orElseThrow(() -> new FacultyNotFoundException(id));
         facultyRepository.delete(faculty);
         return faculty;
@@ -47,6 +59,7 @@ public class FacultyServiceImpl implements FacultyService {
 
     @Override
     public List<Faculty> filterAllByColor(String color) {
+        logger.info("Отработал метод filterAllByColor");
         return facultyRepository.findAll().stream()
                 .filter(faculty -> faculty.getColor().equals(color))
                 .toList();
@@ -55,7 +68,30 @@ public class FacultyServiceImpl implements FacultyService {
 
     @Override
     public List<Faculty> getFacultyByColorOrName(String color, String name) {
+        logger.info("Отработал метод getFacultyByColorOrName");
         return facultyRepository.findByColorIgnoreCaseOrNameIgnoreCase(color, name);
+    }
+
+    @Override
+    public List<Faculty> findByColor(String color) {
+        logger.info("Отработал метод findByColor");
+        return facultyRepository.findByColorIgnoreCase(color);
+    }
+
+    @Override
+    public Collection<Faculty> findByColorOrName(String name, String color) {
+        logger.info("Отработал метод findByColorOrName");
+        return facultyRepository.findByNameIgnoreCaseOrColorIgnoreCase(name, color);
+    }
+
+    @Override
+    public ResponseEntity<String> getLongestNameOfFaculty(){
+        logger.info("Отработал метод getLongestNameOfFaculty");
+        Optional<String> longestFacultyName = facultyRepository.findAll().stream()
+                .map(Faculty::getName)
+                .max(Comparator.comparing(String::length));
+        return longestFacultyName.map(ResponseEntity::ok).
+                orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
 }
